@@ -5,8 +5,8 @@ var o          = require('observable')
 var h          = require('hyperscript')
 
 var rumours = Rumours({
-  db: 'dj',
-  host: 'http://localhost:4567'
+  db: 'dj'
+//  host: 'http://localhost:4567'
 })
 
 var playlist, ctrl, doc
