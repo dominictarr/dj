@@ -10,7 +10,7 @@
   "dependencies": {
     "hash-change": "~0.1.0",
     "hyperscript": "~1.0.1",
-    "observable": "~1.2.0",
+    "observable": "~1.3",
     "rumours": "~1.5.1"
   },
   "devDependencies": {},
