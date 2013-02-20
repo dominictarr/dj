@@ -38,6 +38,10 @@ function onChange() {
     playlist.forEach(function (e, i) {
       if(!(e && e.thumbnail)) playlist.splice(i, 1)
     })
+    var l = playlist.length()
+    var c = ctrl.get('current')
+    if('number' !== typeof c || l > c || c < 0)
+      ctrl.set('current', 0)      
   })
 
   var state   = o.property(ctrl, 'state')
