@@ -26,7 +26,19 @@ function onChange() {
 
   PLAYLIST =
   playlist = rumours.open('r-array!playlist!'+name, function () {})
-  ctrl     = rumours.open('model!ctrl!'+name   , function () {})
+  ctrl     = rumours.open('model!ctrl!'+name   , function () {
+    if('number' !== typeof ctrl.get('current'))
+      ctrl.set('current', 0)
+  })
+
+  //TODO validate playlist. MUST NOT CONTAIN strings, etc.
+
+  playlist.on('update', function () {
+    var splices = []
+    playlist.forEach(function (e, i) {
+      if(!(e && e.thumbnail)) playlist.splice(i, 1)
+    })
+  })
 
   var state   = o.property(ctrl, 'state')
   var current = o.property(ctrl, 'current')
@@ -180,7 +192,7 @@ function onChange() {
 
   var cur = 
   o.compute([state, show, current, plist], function (play, show, i, list) {
-    return play && show ? list[i].id : null
+    return play && show ? list[i || 0].id : null
   })
 
   var ended = false
