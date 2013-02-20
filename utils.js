@@ -60,7 +60,9 @@ exports.list = function (ary, template, el) {
   ary(function(a) {
     el.innerHTML = ''
     a.forEach(function (e, i) {
-      el.appendChild(template(e, i))
+      var t
+      if(e) t = template(e, i)
+      t && el.appendChild(t)
     })
   })
   return el
