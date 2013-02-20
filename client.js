@@ -59,7 +59,6 @@ function onChange() {
       plEl = h('div#playlist', 
         h('h1',
           h('a', {
-            href: '#', 
             onclick: function (e) {
               var c = current() || 0
               current(c <= 0 ? playlist.toJSON().length - 1 : --c)
@@ -68,7 +67,6 @@ function onChange() {
             '<<'
           ), ' ',
           h('a', {
-            href: '#',
             onclick: function (e) {
               state(!state())
               if(!current) current(0)
@@ -77,7 +75,6 @@ function onChange() {
             button
           ), ' ',
           h('a', {
-            href: '#', 
             onclick: function (e) {
               var c = current() || 0
               current(c >= playlist.toJSON().length ? 0 : ++c)
@@ -143,8 +140,8 @@ function onChange() {
         sEl = h('div#search', list2)
       ),
       h('div#player',
-          h('a', {href: '#', onclick: function (e) {
-            show(!show()); e.preventDefault()
+          h('a', {onclick: function (e) {
+            show(!show());
           }}, o.boolean(show, 'hide', 'show')),
           h('div', {style: { display: o.boolean(show, 'block', 'none') }},
             h('div#yt_player')
