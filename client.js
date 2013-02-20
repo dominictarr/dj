@@ -91,7 +91,6 @@ function onChange() {
           })
         ),
         u.list(plist, function (e, i) {
-
           return h('tr.track', 
             {style: {
               display: 'table-row',
