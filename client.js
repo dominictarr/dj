@@ -36,9 +36,12 @@ function onChange() {
   playlist.on('update', function () {
     var splices = []
     playlist.forEach(function (e, i) {
-      if(!(e && e.thumbnail)) playlist.splice(i, 1)
+      if(!(e && e.thumbnail)) {
+        console.log('splice', e, i)
+        playlist.splice(i, 1)
+      }
     })
-    var l = playlist.length()
+    var l = playlist.length
     var c = ctrl.get('current')
     if('number' !== typeof c || l > c || c < 0)
       ctrl.set('current', 0)      
@@ -52,6 +55,8 @@ function onChange() {
   var button  = o.boolean (state, '[stop]', '[play>')
   var button2  = o.boolean (state, '[]', '>>')
   
+  show(true)
+
   var list = h('table#playlist', {style: {
     'font-size': '2em',
     border: o.boolean(_part, 'dashed 1px', 'solid 1px')
@@ -77,7 +82,7 @@ function onChange() {
           h('a', {
             onclick: function (e) {
               var c = current() || 0
-              current(c <= 0 ? playlist.toJSON().length - 1 : --c)
+              current(c <= 0 ? playlist.length - 1 : --c)
               e.preventDefault()
             }},
             '<<'
@@ -93,7 +98,7 @@ function onChange() {
           h('a', {
             onclick: function (e) {
               var c = current() || 0
-              current(c >= playlist.toJSON().length ? 0 : ++c)
+              current(c >= playlist.length ? 0 : ++c)
               e.preventDefault()
             }},
             '>>'
@@ -187,6 +192,9 @@ function onChange() {
         'background' : o.compute([item], function (j) {
           return j == i ? '#5ee' : '#eee'
         })
+      },
+      onclick: function () {
+          playlist.push(e)
       }}, 
       h('td', h('img', {src: e.thumbnail.sqDefault})),
       h('td', e.title))
