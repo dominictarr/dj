@@ -57,14 +57,9 @@ function onChange() {
   
   show(true)
 
-  var list = h('table#playlist', {style: {
-    'font-size': '2em',
-    border: o.boolean(_part, 'dashed 1px', 'solid 1px')
-  }})
+  var list = h('table#playlist')
 
-  var list2 = h('table', {style: {
-    border: o.boolean(part, 'dashed 1px', 'solid 1px')
-  }})
+  var list2 = h('table#searchlist')
   
   var plist = u.rArray(playlist)
 
@@ -76,7 +71,7 @@ function onChange() {
   var plEl, sEl
 
   document.body.appendChild(
-    h('div#content', h('code', {style: {'font-family': 'monospace'}},
+    h('div#content',
       plEl = h('div#playlist', 
         h('h1',
           h('a', {
@@ -109,26 +104,19 @@ function onChange() {
           })
         ),
         u.list(plist, function (e, i) {
-          return h('tr.track', 
-            {style: {
-              display: 'table-row',
-              border: o.compute([current, button], function (s) {
-                return s == i ? '1px solid red' : ''
+          return h('tr', 
+            {className:
+              o.compute([current, button], function (s) {
                 return s == i ? 
-                  '1px solid ' + (button2() ? 'green'  : 'blue')
-                : ''
+                  'track_playing' : 'track_notplaying'
               })
-            }},
+            },
 
             h('td.thumb', 
               h('img', {src: e.thumbnail.sqDefault})
             ),
 
-            h('td.trackname', {style: {
-                'min-width': '250px', display: 'inline-block'
-              }}, 
-              e.title
-            ),
+            h('td.trackname', e.title),
             h('td.del',
               h('a', {
                 href: '#',
@@ -161,16 +149,18 @@ function onChange() {
         sEl = h('div#search', list2)
       ),
       h('div#player',
-          h('a', {onclick: function (e) {
-            show(!show());
-          }}, o.boolean(show, 'hide', 'show')),
-          h('div', {style: { display: o.boolean(show, 'block', 'none') }},
-            h('div#yt_player')
-          )
+        h('a', {onclick: function (e) {
+          show(!show());
+        }}, o.boolean(show, 'hide', 'show')),
+        h('div', {className: 
+            o.boolean(show, 'showplayer', 'hideplayer') 
+          },
+          h('div#yt_player')
         )
       )
     )
   )
+  
 
   o.hover(plEl)(part)
 
@@ -188,11 +178,10 @@ function onChange() {
   item = u.index(search)
 
   u.list(search, function (e, i) {
-    return h('tr', {style: {
-        'background' : o.compute([item], function (j) {
-          return j == i ? '#5ee' : '#eee'
-        })
-      },
+    return h('tr', {className:
+      o.compute([item], function (j) {
+        return j == i ? 'current': 'notcurrent'
+      }),
       onclick: function () {
           playlist.push(e)
       }}, 
