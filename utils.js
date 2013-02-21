@@ -57,14 +57,17 @@ exports.log = function (ob, name) {
 
 exports.list = function (ary, template, el) {
   el = el || document.createElement('ul')
-  ary(function(a) {
+  function onUpdate(a) {
     el.innerHTML = ''
     a.forEach(function (e, i) {
       var t
       if(e) t = template(e, i)
       t && el.appendChild(t)
     })
-  })
+  }
+
+  ary(onUpdate)
+  onUpdate(ary() || [])
   return el
 }
 
