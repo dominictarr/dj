@@ -24,6 +24,7 @@ function onChange() {
   if(playlist) playlist.dispose()
   if(ctrl)     ctrl.dispose()
 
+  //PLAYLIST global, so can interact with the player from console.
   PLAYLIST =
   playlist = rumours.open('r-array!playlist!'+name, function () {})
   ctrl     = rumours.open('model!ctrl!'+name   , function () {
@@ -37,7 +38,6 @@ function onChange() {
     var splices = []
     playlist.forEach(function (e, i) {
       if(!(e && e.thumbnail)) {
-        console.log('splice', e, i)
         playlist.splice(i, 1)
       }
     })
@@ -62,7 +62,6 @@ function onChange() {
   var list2 = h('table#searchlist')
   
   var plist = u.rArray(playlist)
-
   var player, input, search, list2
 
   var item
@@ -74,6 +73,10 @@ function onChange() {
     h('div#content',
       plEl = h('div#playlist', 
         h('h1',
+          h('a', {onclick: function (e) {
+              show(!show());
+            }}, o.boolean(show, 'hide', 'show')
+          ),
           h('a', {
             onclick: function (e) {
               var c = current() || 0
@@ -81,7 +84,7 @@ function onChange() {
               e.preventDefault()
             }},
             '<<'
-          ), ' ',
+          ),
           h('a', {
             onclick: function (e) {
               state(!state())
@@ -89,7 +92,7 @@ function onChange() {
               e.preventDefault()
             }},
             button
-          ), ' ',
+          ),
           h('a', {
             onclick: function (e) {
               var c = current() || 0
@@ -97,7 +100,7 @@ function onChange() {
               e.preventDefault()
             }},
             '>>'
-          ), ' ',
+          ),
           o.compute([current, plist], function (c, list) {
             var t = list[c]
             return t ? t.title : ''
@@ -135,9 +138,9 @@ function onChange() {
             playlist.push(search()[item()])
             this.select()
           } else {
+            if('number' !== typeof item()) item(0)
             if(e.keyCode == 38) {
-              if(!item()) part(false)
-              else        item(item() - 1)
+              item(item() - 1)
               e.preventDefault()
             }
             if(e.keyCode == 40) {
@@ -149,9 +152,6 @@ function onChange() {
         sEl = h('div#search', list2)
       ),
       h('div#player',
-        h('a', {onclick: function (e) {
-          show(!show());
-        }}, o.boolean(show, 'hide', 'show')),
         h('div', {className: 
             o.boolean(show, 'showplayer', 'hideplayer') 
           },
@@ -178,17 +178,32 @@ function onChange() {
   item = u.index(search)
 
   u.list(search, function (e, i) {
-    return h('tr', {className:
-      o.compute([item], function (j) {
-        return j == i ? 'current': 'notcurrent'
-      }),
-      onclick: function () {
+    var t
+    return t = h('tr', {className:
+        o.compute([item, search], function (j) {
+          //very confused why this is not working.
+          //but the other compute below is,
+          //and the other cursor does work...!?!??
+          process.nextTick(function () {
+            t.className = j == i ? 'current' :'notcurrent'            
+          })
+          return j == i ? 'current' :'notcurrent'
+        }),
+        onclick: function () {
           playlist.push(e)
-      }}, 
+        }
+      },
+      h('td', 
+        o.compute([item], function (s) {
+          return s == i ? 
+            '*' : '-'
+        })
+      ),
       h('td', h('img', {src: e.thumbnail.sqDefault})),
       h('td', e.title))
   }, list2)
 
+  //PLAYER global, so can interact with the player from console.
   player = PLAYER = new YouTubePlayer({id: 'yt_player'})
 
   var cur = 
