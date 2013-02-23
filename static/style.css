@@ -1,3 +1,132 @@
 body {
-  background: pink;
+  background-color: #333333;
+font-family: arial, helvetica, sans-serif;
+  border: 1px solid;
+  margin: 50px;
+  width: 640px;
+background-image: url(../stripe.png);
+background-repeat: repeat;
+  }
+
+h1 {
+color: #ffffff;
+font-size: 1.5em;
+text-shadow: -1px -1px #000000;
+border-bottom: 1px solid #000000;
+padding-bottom: 10px;
+background-color: #222222;
+margin-top: 0;
+padding-top: 10px;
+text-overflow: ellipsis;
 }
+
+#player a {
+background-color: #111111;
+color: #ffffff;
+font-weight: bold;
+font-size: 1.0em;
+padding: 7px;
+text-shadow: -1px -1px #000000;
+text-decoration: underline;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border: 1px solid #000000;
+}
+
+#player a:hover {
+background-color: #444444;
+border: 1px solid #000000;
+}
+#playlist {
+color: #b3b3b3;
+font-weight: bold;
+text-shadow: -1px -1px #000000;
+}
+
+#playlist a {
+color: #b3b3b3;
+border: 1px solid #000000;
+font-weight: bold;
+font-size: 0.9em;
+padding: 6px 6px 4px 6px;
+text-decoration: none;
+text-shadow: -1px -1px #000000;
+background-color: #000000;
+border-radius: 5px;
+-moz-border-radius: 5px;
+}
+
+h1 a {
+color: #888888;
+text-shadow: -1px -1px #000000;
+font-size: 0.8em;
+padding: 8px 6px 4px 6px;
+margin-left: 3px;
+background-color: #111111;
+border-radius: 5px;
+-moz-border-radius: 5px;
+border: 1px solid #333333;
+
+}
+
+
+input {
+  font-size: 15px;
+color: #888888;
+  padding: 5px;
+height: 20px;
+  width: 540px;
+margin-left: 5px;
+margin-right: 5px;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+
+table {
+  width: 100%;
+}
+
+
+td {
+padding-left: 5px;
+padding-right: 5px;
+margin-left: 0;
+margin-right: 0;
+border-bottom: 1px solid #000000;
+}
+
+.current {
+  background: #222222;
+color: #ffffff;
+font-weight: bold;
+font-size: 0.9em;
+text-shadow: -1px -1px #000000;
+}
+
+.notcurrent {
+color: #b3b3b3;
+font-weight: bold;
+font-size: 0.9em;
+text-shadow: -1px -1px #000000;
+}
+
+.track_playing {
+  background: #222222;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-shadow: -1px -1px #000000;
+  background: #333333;
+}
+
+.showplayer {
+  display: inline-block;
+}
+.hideplayer {
+  display: none;
+}
+.thing {
+  background: #1cbed7;
+}
+
+
