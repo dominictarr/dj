@@ -10,10 +10,7 @@ exports.debounce = function (b, delay, max) {
 
   b(function () {
     clearTimeout(timer)
-    console.log('DEBOUNCE +')
-
     timer = setTimeout(function () {
-      console.log('DEBOUNCE -')
       v(b())
     }, delay || 333)
 
@@ -75,7 +72,6 @@ exports.index = function (list) {
   var v = o(); v(0)
   return o.transform(v, function (n) {
     var l = list() ? list().length : 1
-    console.log('N', n)
     return 0 > n ? 0 : n >= l ? l - 1 : n
   })
 }
