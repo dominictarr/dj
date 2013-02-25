@@ -79,6 +79,7 @@ function onChange() {
         })
       },
 
+
       h('td.thumb', 
         h('img', {src: e.thumbnail.sqDefault})
       ),
@@ -96,9 +97,21 @@ function onChange() {
     )
   })
 
+  //some hacks around a possible bug in r-array,
+  //to get it working right now, and then fix soon...
+
   playlist.on('update', function () {
+    console.log('UPDATE',  playlist.toJSON())
     list._reset(playlist.toJSON())
+    plist(playlist.toJSON())
   })
+
+  var hack = setInterval(function () {
+    if(!playlist.toJSON().length) return
+    list._reset(playlist.toJSON())
+    console.log('inited')
+    clearInterval(hack)
+  }, 500)
 
   document.body.appendChild(
     h('div#content',
@@ -111,7 +124,7 @@ function onChange() {
           h('a', {
             onclick: function (e) {
               var c = current() || 0
-              current(c <= 0 ? playlist.length - 1 : --c)
+              current(c <= 0 ? playlist.toJSON().length - 1 : --c)
               e.preventDefault()
             }},
             '<<'
@@ -127,7 +140,7 @@ function onChange() {
           h('a', {
             onclick: function (e) {
               var c = current() || 0
-              current(c >= playlist.length ? 0 : ++c)
+              current(c >= playlist.toJSON().length ? 0 : ++c)
               e.preventDefault()
             }},
             '>>'
@@ -142,7 +155,8 @@ function onChange() {
       h('div#search',
         input = h('input', {onkeydown: function (e) {
           if(e.keyCode == 13 && this.value) {            
-            list.push(search()[item()])
+            //list.push(search()[item()])
+            list.splice(playlist.toJSON().length, 0, search()[item()])
             this.select()
           } else {
             if('number' !== typeof item()) item(0)
@@ -198,15 +212,16 @@ function onChange() {
         }),
         onclick: function () {
           console.log('PUSH', e)
-          list.push(e)
+          list.splice(playlist.toJSON().length, 0, e)
+//          list.push(e)
         }
-      },
+      }, /*,
       h('td', 
         o.compute([item], function (s) {
           return s == i ? 
             '*' : '-'
         })
-      ),
+      ),*/
       h('td', h('img', {src: e.thumbnail.sqDefault})),
       h('td', e.title))
   }, list2)
@@ -216,7 +231,7 @@ function onChange() {
 
   var cur = 
   o.compute([state, show, current, plist], function (play, show, i, list) {
-    return play && show ? list[i || 0].id : null
+    return play && show ? (list[i || 0] || {id: null}).id : null
   })
 
   var ended = false
