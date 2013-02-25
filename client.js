@@ -7,6 +7,7 @@ var h          = require('hyperscript')
 var jsonp      = require('jsonp')
 var YouTubePlayer 
                = require('youtube-player')
+var Sortable   = require('sortable')
 
 var rumours = Rumours({
   db: 'dj'
@@ -69,6 +70,36 @@ function onChange() {
 
   var plEl, sEl
 
+  var list = Sortable(playlist, function (e, i) {
+    return h('tr', 
+      {className:
+        o.compute([current, button], function (s) {
+          return s == i ? 
+            'track_playing' : 'track_notplaying'
+        })
+      },
+
+      h('td.thumb', 
+        h('img', {src: e.thumbnail.sqDefault})
+      ),
+
+      h('td.trackname', e.title),
+      h('td.del',
+        h('a', {
+          href: '#',
+          onclick: function (e) {
+            list.splice(i, 1)
+            e.preventDefault()
+          }}, 'X'
+        )
+      )
+    )
+  })
+
+  playlist.on('update', function () {
+    list._reset(playlist.toJSON())
+  })
+
   document.body.appendChild(
     h('div#content',
       plEl = h('div#playlist', 
@@ -106,36 +137,12 @@ function onChange() {
             return t ? t.title : ''
           })
         ),
-        u.list(plist, function (e, i) {
-          return h('tr', 
-            {className:
-              o.compute([current, button], function (s) {
-                return s == i ? 
-                  'track_playing' : 'track_notplaying'
-              })
-            },
-
-            h('td.thumb', 
-              h('img', {src: e.thumbnail.sqDefault})
-            ),
-
-            h('td.trackname', e.title),
-            h('td.del',
-              h('a', {
-                href: '#',
-                onclick: function (e) {
-                  playlist.splice(i, 1)
-                  e.preventDefault()
-                }}, 'X'
-              )
-            )
-          )
-        }, list)
+        list.element
       ),
       h('div#search',
         input = h('input', {onkeydown: function (e) {
           if(e.keyCode == 13 && this.value) {            
-            playlist.push(search()[item()])
+            list.push(search()[item()])
             this.select()
           } else {
             if('number' !== typeof item()) item(0)
@@ -190,7 +197,8 @@ function onChange() {
           return j == i ? 'current' :'notcurrent'
         }),
         onclick: function () {
-          playlist.push(e)
+          console.log('PUSH', e)
+          list.push(e)
         }
       },
       h('td', 
