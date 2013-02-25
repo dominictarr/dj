@@ -14,7 +14,7 @@
     "rumours": "~1.6",
     "youtube-player": "~0.1.5",
     "jsonp": "0.0.3",
-    "sortable": "1.2"
+    "sortable": "2.0"
   },
   "devDependencies": {},
   "scripts": {
